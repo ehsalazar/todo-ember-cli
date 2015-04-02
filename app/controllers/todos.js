@@ -2,7 +2,14 @@ import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
   actions: {
+    clearCompleted: function() {
+      var completed = this.filterBy('isCompleted', true);
+      completed.invoke('deleteRecord');
+      completed.invoke('save');
+    },
     createTodo: function(newTitle) {
+      var title = this.get('newTitle');
+      if (!title.trim()) { return; }
       // create the new todo
       var todo = this.store.createRecord('todo', {
         title: newTitle,
@@ -14,17 +21,6 @@ export default Ember.ArrayController.extend({
       todo.save();
     }
   },
-
-  allAreDone: function(key, value) {
-    console.log(key + ": " + value);
-    if (value === undefined) {
-      return this.get('length') > 0 && this.isEvery('isCompleted', true);
-    } else {
-      this.setEach('isCompleted', value);
-      this.invoke('save');
-      return value;
-    }
-  }.property('@each.isCompleted'),
 
   hasCompleted: function() {
     return this.get('completed') > 0;
@@ -41,5 +37,15 @@ export default Ember.ArrayController.extend({
   inflection: function() {
     var remaining = this.get('remaining');
     return (remaining === 1) ? 'item' : 'items';
-  }.property('remaining')
+  }.property('remaining'),
+
+  allAreDone: function(key, value) {
+    if (value === undefined) {
+      return !!this.get('length') && this.isEvery('isCompleted', true);
+    } else {
+      this.setEach('isCompleted', value);
+      this.invoke('save');
+      return value;
+    }
+  }.property('@each.isCompleted')
 });

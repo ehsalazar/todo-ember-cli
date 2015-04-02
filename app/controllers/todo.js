@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
   actions: {
     editTodo: function() {
       this.set('isEditing', true);
@@ -22,5 +22,17 @@ export default Ember.ObjectController.extend({
         todo.deleteRecord();
         todo.save();
     }
-  }
+  },
+  isCompleted: function(key, value){
+    var model = this.get('model');
+    if (value === undefined) {
+      // property being used as a getter
+      return model.get('isCompleted');
+    } else {
+      // property being used as a setter
+      model.set('isCompleted', value);
+      model.save();
+      return value;
+    }
+  }.property('model.isCompleted')
 });
