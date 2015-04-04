@@ -1,5 +1,5 @@
 <ul id="todo-list">
-    {{#each todo in model}}
+    {{#each todo in content itemController="todo"}}
         <li {{bind-attr class="todo.isCompleted:completed todo.isEditing:editing"}}>
             {{#if todo.isEditing}}
                 {{input type="text" class="edit" value=title focus-out="acceptChanges" insert-newline="acceptChanges"}}

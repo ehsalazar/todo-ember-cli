@@ -5,5 +5,3 @@ export default Ember.TextField.extend({
     this.$().focus();
   }
 });
-
-Ember.Handlebars.helper('edit-todo', Todos.EditTodoView);
